@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Pokemon@93",
+    "database": "Identification_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "Pokemon@93",
+    "database": "Identification_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "Pokemon@93",
+    "database": "Identification_prod",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
