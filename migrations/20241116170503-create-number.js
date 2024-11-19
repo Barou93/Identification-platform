@@ -1,11 +1,11 @@
 /** @format */
 
-"use strict";
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Numbers", {
+    await queryInterface.createTable('Numbers', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -16,15 +16,18 @@ module.exports = {
       phoneNumber: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique: true,
+        validate: {
+          isNumeric: true, // Vérifie que le numéro est numérique
+          len: [8, 8], // Limite à 9 chiffres
+          startsWith(value) {
+            if (!value.startsWith('5')) {
+              throw new Error('Le numéro doit commencer par 5.');
+            }
+          },
+        },
       },
-      otp: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      otpVerified: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -36,6 +39,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Numbers");
+    await queryInterface.dropTable('Numbers');
   },
 };

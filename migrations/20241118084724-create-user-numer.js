@@ -1,55 +1,45 @@
-/** @format */
-
 'use strict';
-const { v4: uuidv4 } = require('uuid');
-
 /** @type {import('sequelize-cli').Migration} */
+const { v4: uuidv4 } = require('uuid');
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('UserNumbers', {
       id: {
         allowNull: false,
-
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: uuidv4,
       },
-      email: {
+      numberId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+      },
+      number: {
         allowNull: false,
         type: Sequelize.STRING,
         unique: true,
         validate: {
-          isEmail: true, // Basic email validation
+          isNumeric: true,
+          len: [8, 8],
+          startsWith(value) {
+            if (!value.startsWith('5')) {
+              throw new Error('Le numéro doit commencer par 5.');
+            }
+          },
         },
       },
-      password: {
+      otp: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      roles: {
+      otpExpiresAt: {
         allowNull: false,
-        type: Sequelize.ENUM('reviewer', 'admin'),
-        defaultValue: 'reviewer',
+        type: Sequelize.DATE,
       },
-      isAdmin: {
+      otpVerified: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false,
-      },
-      passwordChangedAt: {
-        allowNull: true,
-        type: Sequelize.DATE,
-        defaultValue: function () {
-          return new Date();
-        },
-      },
-      passwordResetToken: {
-        allowNull: true,
-        type: Sequelize.STRING,
-      },
-      passwordResetExpires: {
-        allowNull: true,
-        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
@@ -60,10 +50,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    //Add constrants for specifics email
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('UserNumbers');
   },
 };
